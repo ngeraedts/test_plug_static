@@ -1,19 +1,28 @@
 # PlugstaticConf
 
-**TODO: Add description**
+A simple Elixir project to outline a configuration issue using Plug, Conform, and Distillery.
 
-## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `plugstatic_conf` to your list of dependencies in `mix.exs`:
+## Setup
+The following steps outline the surrounding environment. You will need permission to write to `/opt/testapp/` for this.
 
-```elixir
-def deps do
-  [{:plugstatic_conf, "~> 0.1.0"}]
-end
+```
+> mkdir /opt/testapp/{dev,prod}
+> echo "dev testfile" > /opt/testapp/dev/testfile.txt
+> echo "prod testfile" > /opt/testapp/prod/testfile.txt
+
 ```
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/plugstatic_conf](https://hexdocs.pm/plugstatic_conf).
+Build the application for both the `dev` and `prod` environments.
 
+```
+> mix deps.get
+> mix do deps.compile, release
+> MIX_ENV=prod mix deps.compile, release
+```
+
+## The Problem
+
+When running the application via `iex`, the configuration values from `config/<env>.exs` appear to be used as expected; the `/static` route is avaialble, and serves the correct file based on the environment.
+
+When a release is run (e.g. `_build/<env>/rel/test_plug_static/bin/test_plug_static console`), the static route does not serve files out of the specified path.
